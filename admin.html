@@ -1,0 +1,1810 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - The BnB 🏠</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F5;
+            color: #2D3142;
+            font-size: 15px;
+            line-height: 150%;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Login Modal */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 49, 66, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .login-overlay.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .login-modal {
+            background: white;
+            width: 480px;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .login-modal h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2D3142;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2D3142;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            border: 2px solid #E8E8E8;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #FF6B35;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .password-toggle:hover {
+            color: #FF6B35;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            width: 100%;
+            height: 48px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background: #E85A2A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: center;
+            color: #FF6B35;
+            font-size: 14px;
+            margin-top: 16px;
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .forgot-password:hover {
+            color: #E85A2A;
+        }
+
+        .biometric-login {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #E8E8E8;
+            text-align: center;
+        }
+
+        .biometric-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .biometric-btn:hover {
+            color: #FF6B35;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: white;
+            border-right: 1px solid #E8E8E8;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #FF6B35;
+            border-bottom: 1px solid #E8E8E8;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 16px 0;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background: #FFF8F0;
+            color: #FF6B35;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+            color: #FF6B35;
+            border-right: 3px solid #FF6B35;
+        }
+
+        .sidebar-user {
+            padding: 24px;
+            border-top: 1px solid #E8E8E8;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #2D3142;
+        }
+
+        .user-badge {
+            display: inline-block;
+            font-size: 12px;
+            color: #FF6B35;
+            background: rgba(255, 107, 53, 0.1);
+            padding: 2px 8px;
+            border-radius: 8px;
+            margin-top: 2px;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .logout-link:hover {
+            color: #FF6B35;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            background: white;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            border-bottom: 1px solid #E8E8E8;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .top-bar h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2D3142;
+        }
+
+        .top-bar-controls {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .date-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #F5F5F5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .date-selector:hover {
+            background: #E8E8E8;
+        }
+
+        .date-selector span {
+            font-size: 14px;
+            color: #2D3142;
+        }
+
+        .notification-icon {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F5F5F5;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .notification-icon:hover {
+            background: #E8E8E8;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #FF6B35;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 32px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #E8E8E8;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.bookings {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 107, 53, 0.05) 100%);
+        }
+
+        .stat-card.listings {
+            background: linear-gradient(135deg, rgba(76, 205, 196, 0.1) 0%, rgba(76, 205, 196, 0.05) 100%);
+        }
+
+        .stat-card.revenue {
+            background: linear-gradient(135deg, rgba(247, 147, 30, 0.1) 0%, rgba(247, 147, 30, 0.05) 100%);
+        }
+
+        .stat-card.occupancy {
+            background: linear-gradient(135deg, rgba(45, 49, 66, 0.1) 0%, rgba(45, 49, 66, 0.05) 100%);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2D3142;
+            margin-bottom: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: #10B981;
+        }
+
+        .stat-trend.negative {
+            color: #EF4444;
+        }
+
+        /* Listings Section */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2D3142;
+        }
+
+        .btn-add {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-add:hover {
+            background: #E85A2A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-add:active {
+            transform: scale(0.98);
+        }
+
+        .listings-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #E8E8E8;
+            overflow: hidden;
+        }
+
+        .listing-row {
+            display: grid;
+            grid-template-columns: 80px 2fr 1fr 120px 120px 120px 80px;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid #E8E8E8;
+            transition: background 0.2s ease-in-out;
+        }
+
+        .listing-row:hover {
+            background: #FFF8F0;
+        }
+
+        .listing-row:last-child {
+            border-bottom: none;
+        }
+
+        .listing-row.header {
+            background: #F5F5F5;
+            font-weight: 600;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .listing-row.header:hover {
+            background: #F5F5F5;
+        }
+
+        .listing-thumbnail {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .listing-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .listing-name {
+            font-weight: 600;
+            color: #2D3142;
+            font-size: 15px;
+        }
+
+        .listing-location {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .status-badge.inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+        }
+
+        .listing-price {
+            font-weight: 600;
+            color: #FF6B35;
+            font-family: 'Outfit', sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .occupancy-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .occupancy-value {
+            font-size: 13px;
+            color: #2D3142;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #E8E8E8;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B35 0%, #F7931E 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .listing-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F5F5F5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            color: #666;
+        }
+
+        .action-btn:hover {
+            background: #FF6B35;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Slide-in Panel */
+        .slide-panel {
+            position: fixed;
+            top: 0;
+            right: -560px;
+            width: 560px;
+            height: 100vh;
+            background: white;
+            box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease-out;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .slide-panel.open {
+            right: 0;
+        }
+
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 49, 66, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 150;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .panel-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .panel-header {
+            padding: 24px;
+            border-bottom: 1px solid #E8E8E8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2D3142;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F5F5F5;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            background: #E8E8E8;
+            transform: rotate(90deg);
+        }
+
+        .panel-content {
+            padding: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #E8E8E8;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .radio-option:hover {
+            border-color: #FF6B35;
+        }
+
+        .radio-option.selected {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .stepper-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F5F5F5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .stepper-btn:hover {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .stepper-value {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            border: 2px solid #E8E8E8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .checkbox-item:hover {
+            border-color: #FF6B35;
+        }
+
+        .checkbox-item.checked {
+            background: rgba(255, 107, 53, 0.1);
+            border-color: #FF6B35;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .checkbox-item label {
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .textarea-input {
+            width: 100%;
+            min-height: 100px;
+            border: 2px solid #E8E8E8;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .textarea-input:focus {
+            outline: none;
+            border-color: #FF6B35;
+        }
+
+        .upload-zone {
+            border: 2px dashed #E8E8E8;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            margin-top: 8px;
+        }
+
+        .upload-zone:hover {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: move;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .preview-btn {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            font-size: 12px;
+        }
+
+        .preview-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .cover-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(255, 107, 53, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .panel-footer {
+            padding: 24px;
+            border-top: 1px solid #E8E8E8;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            height: 48px;
+            background: white;
+            color: #666;
+            border: 2px solid #E8E8E8;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .btn-primary.flex {
+            flex: 2;
+        }
+
+        /* Floating Action Menu */
+        .fab-menu {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 100;
+        }
+
+        .fab-button {
+            width: 56px;
+            height: 56px;
+            background: #FF6B35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+            border: none;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.1) rotate(45deg);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .fab-options {
+            position: absolute;
+            bottom: 72px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: all 0.3s ease-out;
+        }
+
+        .fab-options.open {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .fab-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+        }
+
+        .fab-option:hover {
+            transform: translateX(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .fab-option-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FFF8F0;
+            border-radius: 50%;
+            color: #FF6B35;
+        }
+
+        .fab-option-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D3142;
+        }
+
+        /* Booking Requests Table Section */
+        .bookings-section {
+            margin-top: 32px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #E8E8E8;
+            padding: 24px;
+        }
+
+        .bookings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .bookings-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2D3142;
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: white;
+            color: #FF6B35;
+            border: 2px solid #FF6B35;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-download:hover {
+            background: #FF6B35;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .bookings-table thead {
+            background: #F5F5F5;
+        }
+
+        .bookings-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 2px solid #E8E8E8;
+        }
+
+        .bookings-table td {
+            padding: 16px;
+            border-bottom: 1px solid #E8E8E8;
+            font-size: 14px;
+            color: #2D3142;
+        }
+
+        .bookings-table tbody tr {
+            transition: background 0.2s ease-in-out;
+        }
+
+        .bookings-table tbody tr:hover {
+            background: #FFF8F0;
+        }
+
+        .guest-name {
+            font-weight: 600;
+        }
+
+        .booking-contact {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .booking-date {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-240px);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .listing-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .slide-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-modal">
+            <h2>Admin Access 🔐</h2>
+            <p class="login-subtitle">Sign in to manage your listings and bookings</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" placeholder="Enter your username" required="">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password" required="">
+                        <i class="fas fa-eye password-toggle" id="passwordToggle"></i>
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
+                
+                <button type="submit" class="btn-primary">Sign In</button>
+                
+                <a href="#" class="forgot-password">Forgot password?</a>
+                
+                <div class="biometric-login">
+                    <div class="biometric-btn">
+                        <i class="fas fa-fingerprint"></i>
+                        <span>Use Face ID</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">The BnB 🏠</div>
+            
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard 📊
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    Listings 🏠
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    Bookings 📅
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Analytics 📈
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    Settings ⚙️
+                </a>
+            </nav>
+            
+            <div class="sidebar-user">
+                <div class="user-profile">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-info">
+                        <div class="user-name">John Doe</div>
+                        <span class="user-badge">Admin</span>
+                    </div>
+                </div>
+                <div class="logout-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1>Dashboard Overview</h1>
+                <div class="top-bar-controls">
+                    <div class="date-selector">
+                        <i class="fas fa-calendar"></i>
+                        <span>Last 30 days</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card bookings">
+                        <div class="stat-header">
+                            <span class="stat-title">Total Bookings</span>
+                            <span class="stat-icon">📈</span>
+                        </div>
+                        <div class="stat-value">234</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12% from last month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card listings">
+                        <div class="stat-header">
+                            <span class="stat-title">Active Listings</span>
+                            <span class="stat-icon">🏠</span>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>2 new this month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card revenue">
+                        <div class="stat-header">
+                            <span class="stat-title">Revenue This Month</span>
+                            <span class="stat-icon">💰</span>
+                        </div>
+                        <div class="stat-value">KSh 890K</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>18% from last month</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card occupancy">
+                        <div class="stat-header">
+                            <span class="stat-title">Occupancy Rate</span>
+                            <span class="stat-icon">📊</span>
+                        </div>
+                        <div class="stat-value">78%</div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>5% from last month</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listings Management -->
+                <div class="section-header">
+                    <h2>Your Listings 🏠</h2>
+                    <button class="btn-add" id="addListingBtn">
+                        <i class="fas fa-plus"></i>
+                        Add New Listing
+                    </button>
+                </div>
+
+                <div class="listings-container">
+                    <div class="listing-row header">
+                        <div>Image</div>
+                        <div>Property Details</div>
+                        <div>Location</div>
+                        <div>Status</div>
+                        <div>Price/Night</div>
+                        <div>Occupancy</div>
+                        <div>Actions</div>
+                    </div>
+
+                    <div class="listing-row">
+                        <img src="https://storage.googleapis.com/forge-sites/6168ea46a401839d72ee9ea998193bf9b7a13f0e8d6b3394863dc53068bf27b9.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=51afb7fb4a9ab0495022079804455774583ec50c9c505d69fc0290a5686fa72f6efe89bec1aced87150a7162c3ed8dd056eff38f502c6b1ce15a110041cb941a92988ba8b3d104db227513a5577a14b382f8a6946131d7f1c954e8f93085516684ca98ae49adb01a85b7ac7c11a67511ae8c31b3758800aa8d1ba0569aa0c67647763870fc914b4d1d858de8e6a981507f64fc3c9630e2fe8fd5b534c0d122836a344f00d3bc86d7d7299a5db26aca6365883e5cf1713a21bdf4f3a7776632a07c61da9182de64e5fbee8490674759764fa2a175eab64b51b0b256559737fe65340cb44b1d09567460b8b1c50a9efd4c56ab0f9152685c80590848bfddb126bd" alt="Cozy Studio in Westlands" class="listing-thumbnail">
+                        <div class="listing-info">
+                            <div class="listing-name">Cozy Studio in Westlands</div>
+                            <div class="listing-location">2 guests • 1 bed • WiFi</div>
+                        </div>
+                        <div>📍 Nairobi</div>
+                        <span class="status-badge active">Active</span>
+                        <div class="listing-price">KSh 3,500</div>
+                        <div class="occupancy-bar">
+                            <span class="occupancy-value">85%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="listing-actions">
+                            <button class="action-btn"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="listing-row">
+                        <img src="https://storage.googleapis.com/forge-sites/dc48677f23dc095365beb5dc567a9e2b979b73b8917810422b28f6bc90b8881b.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151035Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=c1bc86f0d96fd236101a3606a64a463b65c6a6a7b7f4f54c20bb44e5d35cbb9b9749285f180b7ee4faa7dca522f95777ec1c092c406aeb9cd67accb58e61451aa6017b1bdbd322fb4871a47b804a7b46054bfb60f22516883f20d325b340bd7c1687ee5d1d5640b1b2addba53b061b27b0d3132fb7eea47c5562d2da3d74a9eeaf862ec04eeb58f882a8ed5130024fdb6aa504fac12004960ba5eaf20d4ac91d83903336ac1adb743098da32e4a64b99240417f1b934333ff99004cad04f5323b5340bebe1210ae773d1a3c94f850df979ee8504b7d38a6f2bc9128495f9ace90abf1dfbb2017136389c9899179520748c995d31848d3333e10b0cabe82ce90e" alt="Beachfront Paradise" class="listing-thumbnail">
+                        <div class="listing-info">
+                            <div class="listing-name">Beachfront Paradise</div>
+                            <div class="listing-location">4 guests • 2 beds • WiFi • Pool</div>
+                        </div>
+                        <div>📍 Mombasa</div>
+                        <span class="status-badge active">Active</span>
+                        <div class="listing-price">KSh 6,500</div>
+                        <div class="occupancy-bar">
+                            <span class="occupancy-value">92%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div class="listing-actions">
+                            <button class="action-btn"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="listing-row">
+                        <img src="https://storage.googleapis.com/forge-sites/5a60c2a46095f21e5572f87e870faf1ee60db16ce3306719e8ee5beb523b4e19.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151035Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=6d5b7455a19ecb1e47642a550044f6055c599aaafb6087387f0077f048dd487efdbe0a7dd7c72acbc4f10cdb20d090a0fa91b7a20d9b936ab1be583606b7dfaada17b771a1c087157d2ec9470b79a01feed7daecfc272b14b5ed7c18dc5af394cde9b4c48a1a4aa6d52e26255155fd3601faca6866fec6e1dd15f21d506bd40c9029ae92e9206ede82a476d53035a4f5e3260e6751e78bfe7dc288511806a7414dcb76d15f5dbe06f05c6d3163d02d59f80f28c726277b4d4daf9c829b39cb0268281b6709d0de2f967bdabe9b4f12ecbf89436fda1a3f04bc562dc5c6207654ca22e0cd3082e705ff920365d84c8f5c95d8579ab871658245967508d4dc9042" alt="Garden Bungalow" class="listing-thumbnail">
+                        <div class="listing-info">
+                            <div class="listing-name">Garden Bungalow</div>
+                            <div class="listing-location">3 guests • 2 beds • WiFi • Garden</div>
+                        </div>
+                        <div>📍 Nakuru</div>
+                        <span class="status-badge active">Active</span>
+                        <div class="listing-price">KSh 2,800</div>
+                        <div class="occupancy-bar">
+                            <span class="occupancy-value">68%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 68%"></div>
+                            </div>
+                        </div>
+                        <div class="listing-actions">
+                            <button class="action-btn"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="listing-row">
+                        <img src="https://storage.googleapis.com/forge-sites/a52ad9c7832f316a049f32c83b96b4c82eb34fa4acd541961db1cce0ee0f908a.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151035Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=40b5c4d591e6a7bb999bc8c92c602e79b357604bb73990a1f4eacb315f4d18d02bf4bbfca825b5df2c64100d8d34b0b37d6bb03ea10c33a6604463c36edf2ba65cc6d80736eedfc7b6acaef8744d8fe905428119ba780f2b4c198194f742af60bea72db83716e5084928e3c7a1d316d57eb9721bc125cad666419f7825d851c1d6924bf5de16cb724805e543dffd33103101b4e522b31dce6b9136ed85e24a41d670ded6a9485219213f83b79cd65755a49ddbc15dd9ebae595b416e1dc6f987294e7f5a7c79b8cc5ffc01928859564fb50aeb592fed121709bcbe3d7541de41e4f97a5d8757db26fe015f896c6656b46d3c589b870747287ae3ce8e29305da2" alt="Modern City Loft" class="listing-thumbnail">
+                        <div class="listing-info">
+                            <div class="listing-name">Modern City Loft</div>
+                            <div class="listing-location">2 guests • 1 bed • WiFi • Parking</div>
+                        </div>
+                        <div>📍 Kisumu</div>
+                        <span class="status-badge inactive">Inactive</span>
+                        <div class="listing-price">KSh 4,200</div>
+                        <div class="occupancy-bar">
+                            <span class="occupancy-value">0%</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="listing-actions">
+                            <button class="action-btn"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Requests Section -->
+                <div class="bookings-section">
+                    <div class="bookings-header">
+                        <h2>Recent Booking Requests 📅</h2>
+                        <button class="btn-download">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </button>
+                    </div>
+
+                    <table class="bookings-table">
+                        <thead>
+                            <tr>
+                                <th>Guest Name</th>
+                                <th>Contact</th>
+                                <th>Check-in</th>
+                                <th>Check-out</th>
+                                <th>House Title</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="guest-name">Sarah Mwangi</td>
+                                <td class="booking-contact">sarah.m@email.com<br>+254 712 345 678</td>
+                                <td class="booking-date">Jan 15, 2025</td>
+                                <td class="booking-date">Jan 18, 2025</td>
+                                <td>Cozy Studio in Westlands</td>
+                                <td><span class="status-badge active">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="guest-name">David Kamau</td>
+                                <td class="booking-contact">d.kamau@email.com<br>+254 723 456 789</td>
+                                <td class="booking-date">Jan 20, 2025</td>
+                                <td class="booking-date">Jan 25, 2025</td>
+                                <td>Beachfront Paradise</td>
+                                <td><span class="status-badge active">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="guest-name">Grace Njeri</td>
+                                <td class="booking-contact">grace.n@email.com<br>+254 734 567 890</td>
+                                <td class="booking-date">Jan 22, 2025</td>
+                                <td class="booking-date">Jan 24, 2025</td>
+                                <td>Garden Bungalow</td>
+                                <td><span class="status-badge" style="background: rgba(247, 147, 30, 0.1); color: #F7931E;">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td class="guest-name">Peter Ochieng</td>
+                                <td class="booking-contact">p.ochieng@email.com<br>+254 745 678 901</td>
+                                <td class="booking-date">Feb 1, 2025</td>
+                                <td class="booking-date">Feb 7, 2025</td>
+                                <td>Skyline Penthouse</td>
+                                <td><span class="status-badge active">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="guest-name">Mary Wanjiru</td>
+                                <td class="booking-contact">m.wanjiru@email.com<br>+254 756 789 012</td>
+                                <td class="booking-date">Feb 10, 2025</td>
+                                <td class="booking-date">Feb 15, 2025</td>
+                                <td>Beachfront Paradise</td>
+                                <td><span class="status-badge" style="background: rgba(247, 147, 30, 0.1); color: #F7931E;">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Slide-in Panel for Adding Listing -->
+    <div class="panel-overlay" id="panelOverlay"></div>
+    <div class="slide-panel" id="addListingPanel">
+        <div class="panel-header">
+            <h3>Add New Listing 🏠</h3>
+            <button class="close-btn" id="closePanelBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="panel-content">
+            <form id="listingForm">
+                <div class="form-group">
+                    <label class="form-label">Property Title</label>
+                    <input type="text" class="form-input" placeholder="e.g., Cozy Studio in Westlands" required="">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <select class="form-input">
+                            <option>Select city</option>
+                            <option>Nairobi</option>
+                            <option>Mombasa</option>
+                            <option>Kisumu</option>
+                            <option>Nakuru</option>
+                            <option>Eldoret</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Price per Night (KSh)</label>
+                        <input type="number" class="form-input" placeholder="3500" required="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Property Type</label>
+                    <div class="radio-group">
+                        <div class="radio-option selected">🏢 Apartment</div>
+                        <div class="radio-option">🏠 House</div>
+                        <div class="radio-option">🏘️ Studio</div>
+                        <div class="radio-option">🏰 Villa</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Number of Guests</label>
+                        <div class="stepper">
+                            <button type="button" class="stepper-btn">-</button>
+                            <div class="stepper-value">2</div>
+                            <button type="button" class="stepper-btn">+</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Bedrooms</label>
+                        <div class="stepper">
+                            <button type="button" class="stepper-btn">-</button>
+                            <div class="stepper-value">1</div>
+                            <button type="button" class="stepper-btn">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Amenities</label>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item checked">
+                            <input type="checkbox" id="wifi" checked="">
+                            <label for="wifi">📶 WiFi</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="pool">
+                            <label for="pool">🏊 Pool</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="parking">
+                            <label for="parking">🅿️ Parking</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="garden">
+                            <label for="garden">🌳 Garden</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="gym">
+                            <label for="gym">💪 Gym</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="kitchen">
+                            <label for="kitchen">🍳 Kitchen</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="textarea-input" placeholder="Describe your property, its features, and what makes it special..." rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Photos</label>
+                    <div class="upload-zone">
+                        <div class="upload-icon">☁️</div>
+                        <div class="upload-text">Drag photos here or click to browse</div>
+                        <div class="upload-hint">Max 10 photos • JPG, PNG up to 5MB each</div>
+                    </div>
+                    
+                    <div class="image-preview-grid">
+                        <div class="preview-item">
+                            <img src="https://storage.googleapis.com/forge-sites/6168ea46a401839d72ee9ea998193bf9b7a13f0e8d6b3394863dc53068bf27b9.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=51afb7fb4a9ab0495022079804455774583ec50c9c505d69fc0290a5686fa72f6efe89bec1aced87150a7162c3ed8dd056eff38f502c6b1ce15a110041cb941a92988ba8b3d104db227513a5577a14b382f8a6946131d7f1c954e8f93085516684ca98ae49adb01a85b7ac7c11a67511ae8c31b3758800aa8d1ba0569aa0c67647763870fc914b4d1d858de8e6a981507f64fc3c9630e2fe8fd5b534c0d122836a344f00d3bc86d7d7299a5db26aca6365883e5cf1713a21bdf4f3a7776632a07c61da9182de64e5fbee8490674759764fa2a175eab64b51b0b256559737fe65340cb44b1d09567460b8b1c50a9efd4c56ab0f9152685c80590848bfddb126bd" alt="Preview" class="preview-image">
+                            <div class="preview-actions">
+                                <button type="button" class="preview-btn">⭐</button>
+                                <button type="button" class="preview-btn">✕</button>
+                            </div>
+                            <span class="cover-badge">Cover Photo</span>
+                        </div>
+                        <div class="preview-item">
+                            <img src="https://storage.googleapis.com/forge-sites/dc48677f23dc095365beb5dc567a9e2b979b73b8917810422b28f6bc90b8881b.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151035Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=c1bc86f0d96fd236101a3606a64a463b65c6a6a7b7f4f54c20bb44e5d35cbb9b9749285f180b7ee4faa7dca522f95777ec1c092c406aeb9cd67accb58e61451aa6017b1bdbd322fb4871a47b804a7b46054bfb60f22516883f20d325b340bd7c1687ee5d1d5640b1b2addba53b061b27b0d3132fb7eea47c5562d2da3d74a9eeaf862ec04eeb58f882a8ed5130024fdb6aa504fac12004960ba5eaf20d4ac91d83903336ac1adb743098da32e4a64b99240417f1b934333ff99004cad04f5323b5340bebe1210ae773d1a3c94f850df979ee8504b7d38a6f2bc9128495f9ace90abf1dfbb2017136389c9899179520748c995d31848d3333e10b0cabe82ce90e" alt="Preview" class="preview-image">
+                            <div class="preview-actions">
+                                <button type="button" class="preview-btn">⭐</button>
+                                <button type="button" class="preview-btn">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">House Rules</label>
+                    <textarea class="textarea-input" placeholder="e.g., No smoking, No pets, Check-in after 2 PM..." rows="3"></textarea>
+                </div>
+            </form>
+        </div>
+
+        <div class="panel-footer">
+            <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn-primary flex">Save Listing</button>
+        </div>
+    </div>
+
+    <!-- Floating Action Menu -->
+    <div class="fab-menu">
+        <button class="fab-button" id="fabButton">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="fab-options" id="fabOptions">
+            <div class="fab-option">
+                <div class="fab-option-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="fab-option-text">Add Listing</span>
+            </div>
+            <div class="fab-option">
+                <div class="fab-option-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <span class="fab-option-text">View Bookings</span>
+            </div>
+            <div class="fab-option">
+                <div class="fab-option-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <span class="fab-option-text">Export Data</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login Form Handling
+        const loginOverlay = document.getElementById('loginOverlay');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordToggle = document.getElementById('passwordToggle');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            loginOverlay.classList.add('hidden');
+        });
+
+        passwordToggle.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            passwordToggle.classList.toggle('fa-eye');
+            passwordToggle.classList.toggle('fa-eye-slash');
+        });
+
+        // Panel Management
+        const addListingBtn = document.getElementById('addListingBtn');
+        const addListingPanel = document.getElementById('addListingPanel');
+        const panelOverlay = document.getElementById('panelOverlay');
+        const closePanelBtn = document.getElementById('closePanelBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        function openPanel() {
+            addListingPanel.classList.add('open');
+            panelOverlay.classList.add('visible');
+        }
+
+        function closePanel() {
+            addListingPanel.classList.remove('open');
+            panelOverlay.classList.remove('visible');
+        }
+
+        addListingBtn.addEventListener('click', openPanel);
+        closePanelBtn.addEventListener('click', closePanel);
+        cancelBtn.addEventListener('click', closePanel);
+        panelOverlay.addEventListener('click', closePanel);
+
+        // Radio Options
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.radio-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        // Steppers
+        document.querySelectorAll('.stepper').forEach(stepper => {
+            const minusBtn = stepper.querySelector('.stepper-btn:first-child');
+            const plusBtn = stepper.querySelector('.stepper-btn:last-child');
+            const valueDisplay = stepper.querySelector('.stepper-value');
+            let value = parseInt(valueDisplay.textContent);
+
+            minusBtn.addEventListener('click', () => {
+                if (value > 1) {
+                    value--;
+                    valueDisplay.textContent = value;
+                }
+            });
+
+            plusBtn.addEventListener('click', () => {
+                value++;
+                valueDisplay.textContent = value;
+            });
+        });
+
+        // Checkbox Items
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                this.classList.toggle('checked', checkbox.checked);
+            });
+        });
+
+        // FAB Menu
+        const fabButton = document.getElementById('fabButton');
+        const fabOptions = document.getElementById('fabOptions');
+
+        fabButton.addEventListener('click', () => {
+            fabOptions.classList.toggle('open');
+        });
+
+        // Close FAB menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.fab-menu')) {
+                fabOptions.classList.remove('open');
+            }
+        });
+
+        // Smooth scrolling for menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Stat card animations on hover
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+
+</body></html>
