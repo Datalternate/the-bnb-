@@ -1,0 +1,1276 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The BnB 🏠 - Find Your Perfect Stay Across Kenya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFF8F0;
+            color: #2D3142;
+            font-size: 15px;
+            line-height: 150%;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            height: 88px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 100;
+            transition: all 0.3s ease-out;
+        }
+
+        .nav.scrolled {
+            height: 64px;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: #FF6B35;
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2D3142;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease-out;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #FF6B35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: #FF6B35;
+            border-radius: 2px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .nav-list-space {
+            font-size: 16px;
+            font-weight: 500;
+            color: #FF6B35;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 2px solid #FF6B35;
+            border-radius: 24px;
+            transition: all 0.3s ease-out;
+        }
+
+        .nav-list-space:hover {
+            background: #FF6B35;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .nav-signin {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: #FF6B35;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            transition: all 0.3s ease-out;
+        }
+
+        .nav-signin:hover {
+            background: #e55b2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+        }
+
+        .nav-signin:active {
+            transform: scale(0.98);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 480px;
+            background: linear-gradient(rgba(45, 49, 66, 0.3), rgba(255, 107, 53, 0.4)),
+                        url('https://storage.googleapis.com/forge-sites/3af2cf552d270e76a638c533cfa0c131fe54abe1fe77651d79252490755b93e7.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251101T151034Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&X-Goog-Signature=338d5692cfbd18093d0b9fa4f93dc24d35289a5295a332408f410f9677c36a5bb7e8b76692f746c630662640e3a473601edda3bac2f88abb9c14c01249c89818fd3bd041395425ca8bc39ff4c3c94aab073e35e59cdd7b235ea8f01be9c567930545102c1c2b828a0d1162e032ee1fb47179c641ae72a988d4e0520ff570764e9d8aef58bc35e22deb6fd78f754c45360e7a39f4b72865a165ecc76259594f1c49221c73a9b72bf12e986e811b96e006c6ece3f342853b6c83300b959135c67852e2c6db549d5db2b3989a7c2b4d52fb46c860df4a1f82558c67291670d285bc00a0463af5c4b09eebfbeabc4dc6be0786063d2de89146a5481c815021d92b29');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 32px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: rgba(255,255,255,0.95);
+            font-weight: 400;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 32px;
+            background: white;
+            margin: -80px auto 0;
+            max-width: 800px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-bar-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            z-index: 5;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 56px;
+            border: 2px solid #E8E8E8;
+            border-radius: 28px;
+            padding: 0 20px 0 60px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease-out;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+
+        .search-dropdown {
+            display: none;
+            position: absolute;
+            top: 64px;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 16px;
+            z-index: 20;
+        }
+
+        .search-input:focus + .search-dropdown {
+            display: block;
+        }
+
+        .dropdown-section {
+            margin-bottom: 16px;
+        }
+
+        .dropdown-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .dropdown-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+
+        .dropdown-item:hover {
+            background: #FFF8F0;
+        }
+
+        .dropdown-item-emoji {
+            font-size: 24px;
+        }
+
+        .dropdown-item-text {
+            flex: 1;
+        }
+
+        .dropdown-item-name {
+            font-weight: 500;
+            color: #2D3142;
+        }
+
+        .dropdown-item-meta {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .pill {
+            flex-shrink: 0;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .pill.active {
+            background: #FF6B35;
+            color: white;
+            border: 2px solid #FF6B35;
+        }
+
+        .pill:not(.active) {
+            background: white;
+            color: #2D3142;
+            border: 2px solid #E8E8E8;
+        }
+
+        .pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #FF6B35;
+        }
+
+        .pill:active {
+            transform: scale(0.98);
+        }
+
+        .pill-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #F7931E;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 12px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Properties Section */
+        .properties-section {
+            max-width: 1600px;
+            margin: 48px auto;
+            padding: 0 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            color: #2D3142;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .view-btn {
+            padding: 8px 12px;
+            border: 2px solid #E8E8E8;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+
+        .view-btn.active {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        .view-btn:hover {
+            border-color: #FF6B35;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #E8E8E8;
+            transition: all 0.3s ease-out;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .property-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+            border-color: #FF6B35;
+        }
+
+        .property-card:hover .quick-view-overlay {
+            opacity: 1;
+        }
+
+        .property-card:active {
+            transform: translateY(-4px) scale(0.98);
+        }
+
+        .property-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .property-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease-out;
+        }
+
+        .property-card:hover .property-image {
+            transform: scale(1.1);
+        }
+
+        .badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 5;
+        }
+
+        .badge.popular {
+            background: #F7931E;
+            color: white;
+        }
+
+        .badge.new {
+            background: #4ECDC4;
+            color: white;
+        }
+
+        .save-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+            z-index: 5;
+        }
+
+        .save-btn:hover {
+            transform: scale(1.1);
+            background: #FF6B35;
+        }
+
+        .quick-view-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 24px 16px 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            display: flex;
+            gap: 12px;
+            z-index: 5;
+        }
+
+        .quick-view-btn {
+            flex: 1;
+            padding: 10px;
+            background: white;
+            color: #2D3142;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+
+        .quick-view-btn:hover {
+            background: #FF6B35;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .property-content {
+            padding: 20px;
+        }
+
+        .property-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .property-name {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            color: #2D3142;
+            line-height: 1.3;
+        }
+
+        .property-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .rating-stars {
+            color: #F7931E;
+        }
+
+        .rating-count {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #F5F5F5;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #666;
+        }
+
+        .property-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .property-amenities {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .amenity {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .property-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #E8E8E8;
+        }
+
+        .property-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FF6B35;
+            font-family: 'Outfit', sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .price-period {
+            font-size: 14px;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .property-host {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .host-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2D3142;
+            color: white;
+            padding: 64px 32px 32px;
+            margin-top: 64px;
+        }
+
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #FF6B35;
+        }
+
+        .footer-section p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease-out;
+        }
+
+        .footer-link:hover {
+            color: #FF6B35;
+            padding-left: 4px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease-out;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: #FF6B35;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .newsletter-btn {
+            padding: 12px 24px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+
+        .newsletter-btn:hover {
+            background: #e55b2a;
+            transform: translateY(-2px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease-out;
+            cursor: pointer;
+        }
+
+        .social-link:hover {
+            background: #FF6B35;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .properties-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-center {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 320px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .search-section {
+                margin: -40px 16px 0;
+                padding: 24px;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">The BnB 🏠</div>
+        <div class="nav-center">
+            <a href="#" class="nav-link active">Home</a>
+            <a href="#" class="nav-link">Browse</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="nav-list-space">List Your Space +</a>
+            <a href="#" class="nav-signin">Sign In</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Find Your Perfect Stay Across Kenya 🌍</h1>
+        <p>Youth-friendly accommodations in the most beautiful locations</p>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-bar-wrapper">
+            <span class="search-icon">📍</span>
+            <input type="text" class="search-input" placeholder="Where do you want to go?">
+            <div class="search-dropdown">
+                <div class="dropdown-section">
+                    <div class="dropdown-title">Recent Searches</div>
+                    <div class="dropdown-item">
+                        <span class="dropdown-item-emoji">🕐</span>
+                        <div class="dropdown-item-text">
+                            <div class="dropdown-item-name">Nairobi, Westlands</div>
+                            <div class="dropdown-item-meta">2 days ago</div>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <span class="dropdown-item-emoji">🕐</span>
+                        <div class="dropdown-item-text">
+                            <div class="dropdown-item-name">Mombasa Beach</div>
+                            <div class="dropdown-item-meta">1 week ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown-section">
+                    <div class="dropdown-title">Trending Destinations</div>
+                    <div class="dropdown-item">
+                        <span class="dropdown-item-emoji">🔥</span>
+                        <div class="dropdown-item-text">
+                            <div class="dropdown-item-name">Nairobi</div>
+                            <div class="dropdown-item-meta">142 properties available</div>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <span class="dropdown-item-emoji">🌊</span>
+                        <div class="dropdown-item-text">
+                            <div class="dropdown-item-name">Mombasa</div>
+                            <div class="dropdown-item-meta">87 properties available</div>
+                        </div>
+                    </div>
+                    <div class="dropdown-item">
+                        <span class="dropdown-item-emoji">🦩</span>
+                        <div class="dropdown-item-text">
+                            <div class="dropdown-item-name">Nakuru</div>
+                            <div class="dropdown-item-meta">53 properties available</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-section">
+            <span class="filter-label">Filters:</span>
+            <div class="pill active">All Locations 🌍</div>
+            <div class="pill">Nairobi 🏙️</div>
+            <div class="pill">Mombasa 🏖️</div>
+            <div class="pill">Kisumu 🌊</div>
+            <div class="pill">Nakuru 🦩</div>
+            <div class="pill">Price Range 💰</div>
+            <div class="pill">
+                Amenities 🛁
+                <span class="pill-badge">3</span>
+            </div>
+            <div class="pill">Property Type 🏠</div>
+        </div>
+    </div>
+
+    <!-- Properties Section -->
+    <section class="properties-section">
+        <div class="section-header">
+            <h2 class="section-title">Available Stays</h2>
+            <div class="view-toggle">
+                <button class="view-btn active">Grid</button>
+                <button class="view-btn">List</button>
+            </div>
+        </div>
+        <div class="properties-grid">
+            <!-- Property Card 1 -->
+            <div class="property-card">
+                <div class="property-image-wrapper">
+                    <img src="https://storage.googleapis.com/forge-sites/5dac6d2735f1c4caaca7b1744785a336ca65bb7cdd5f9ecb66902ff85bc24b31.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=080b48106b298b3b223763c1eaa695712288f51be1e312ded9c3087e89ff78dff6535c55b77ef7c19651239e995c0f1c29e19acaf0a2b120cd4132292f56cdf446b9b78cee90f4e8879b2bdd47a191ee290b9ad739c32101dc150f9d6a444a1a5b0cd0de88acf9f544381720a4c5914f8524c2c4f519d9b344c46793105520ffd8e956776510dcc9fde6cc58befa1503e1233361e48fa2d2c78cbd3e1fcd44033693f1f43630a68332a78ebf51569cc0083ba8f204a477d3d6a00715645116a1cd9afe015f0fb041253c5667ca0be4f9928d4a5b018aeb92c4bc1ae1abe06b1b33b86e3b2247b42ab2be821278c51dd10497f19e3a5aedc04cb246048d827ba5" alt="Cozy studio apartment with modern furnishings, large windows, and natural lighting in Nairobi Westlands" class="property-image">
+                    <span class="badge popular">Popular ⭐</span>
+                    <div class="save-btn">❤️</div>
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">View Details</button>
+                        <button class="quick-view-btn">Quick Book</button>
+                    </div>
+                </div>
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-name">Cozy Studio in Westlands</h3>
+                        <div class="property-rating">
+                            <span class="rating-stars">⭐ 4.8</span>
+                            <span class="rating-count">(127)</span>
+                        </div>
+                    </div>
+                    <span class="location-badge">📍 Nairobi, Westlands</span>
+                    <p class="property-description">Modern studio with all amenities. Perfect for young professionals. Walking distance to shopping centers and restaurants.</p>
+                    <div class="property-amenities">
+                        <span class="amenity">📶 WiFi</span>
+                        <span class="amenity">🅿️ Parking</span>
+                        <span class="amenity">🍳 Kitchen</span>
+                        <span class="amenity">❄️ AC</span>
+                    </div>
+                    <div class="property-footer">
+                        <div>
+                            <div class="property-price">KSh 3,500<span class="price-period">/night</span></div>
+                        </div>
+                        <div class="property-host">
+                            <div class="host-avatar">SK</div>
+                            <span>Sarah K.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Card 2 -->
+            <div class="property-card">
+                <div class="property-image-wrapper">
+                    <img src="https://storage.googleapis.com/forge-sites/5e87ee3f19db9431ccaa9ea8b48dabbb3817de911e62f8d98e84dc8a5e2790be.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=af2979b388eb161b05239d5486f18e64552be4a93dfc45aec4543b650ff5109cecc16d0f8ae061eb9bbffc9be1f26ecad379aad791f7be0aa6722a08576d32e3bf63350414f59363718f2f558756a73712bd39072269d8692b1a285ee230adc8b6bb615badf5ce54c369d5c9fa016b9514dd0f1f400e630870ea611c77ed9e93233b82f24b07cb5794e44192624c297355f55ff3f7c9a3fb3d498e93254598672a9505eb5a697e60d857df81b10bff668d9c026cee44b47a06d97f7ba5b60119d82754849154818a4142038cb0539ba564c5b68aeba1ac3d2211d58b3d4c7d8b701f31a90f98258b85ac9f1bb95a047b2fd2bcff3cb5b91087f620d9926b4cdd" alt="Charming beachfront cottage with ocean views, palm trees, and white sand beach in Mombasa" class="property-image">
+                    <span class="badge new">New ✨</span>
+                    <div class="save-btn">❤️</div>
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">View Details</button>
+                        <button class="quick-view-btn">Quick Book</button>
+                    </div>
+                </div>
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-name">Beachfront Paradise</h3>
+                        <div class="property-rating">
+                            <span class="rating-stars">⭐ 4.9</span>
+                            <span class="rating-count">(89)</span>
+                        </div>
+                    </div>
+                    <span class="location-badge">📍 Mombasa, North Coast</span>
+                    <p class="property-description">Wake up to ocean views! Private beach access, swimming pool, and tropical garden. Perfect getaway for groups.</p>
+                    <div class="property-amenities">
+                        <span class="amenity">📶 WiFi</span>
+                        <span class="amenity">🏊 Pool</span>
+                        <span class="amenity">🏖️ Beach</span>
+                        <span class="amenity">🍳 Kitchen</span>
+                    </div>
+                    <div class="property-footer">
+                        <div>
+                            <div class="property-price">KSh 6,500<span class="price-period">/night</span></div>
+                        </div>
+                        <div class="property-host">
+                            <div class="host-avatar">JM</div>
+                            <span>John M.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Card 3 -->
+            <div class="property-card">
+                <div class="property-image-wrapper">
+                    <img src="https://storage.googleapis.com/forge-sites/199e6667683c358a0baab635454a8f7a8ff835554dcb76a1cc352b3d21555d54.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=30b6399bfe0e8d8c4a10888c9002516b94ddd8bb582c87eb0b8811734ffad35eb6ea6b43566762c9fcd83b7af7e56e6594a8c043c85efb716dba5f1362441e70b1a32912fae8a50364423a613a37a19639796dced8915c92dc66fa6de8a9817800123d35a7380a40b7c24585154b2eb8a054784efdc4fe439c17eb91d9f4189c32724f9f4794f2f3dc19e663df8a1c9e4e488d1ba966cbbd3114eab01fb1c7e09500c895d573e890b1ab1cece346c0b227539b25f275e565cc831ce1febd6b815bbc2597639169a9bb4a1b14929c0a9335b9722b6c543893c7f2f54059b358462d76e1b589012d30a0b27c510a5c4b45197adeb240f801ed73b8eebab46fd3a1" alt="Peaceful garden bungalow surrounded by lush tropical greenery and colorful flowers in Nakuru" class="property-image">
+                    <div class="save-btn">❤️</div>
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">View Details</button>
+                        <button class="quick-view-btn">Quick Book</button>
+                    </div>
+                </div>
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-name">Garden Bungalow</h3>
+                        <div class="property-rating">
+                            <span class="rating-stars">⭐ 4.7</span>
+                            <span class="rating-count">(64)</span>
+                        </div>
+                    </div>
+                    <span class="location-badge">📍 Nakuru</span>
+                    <p class="property-description">Peaceful retreat surrounded by nature. Perfect for relaxation and bird watching. Close to Lake Nakuru National Park.</p>
+                    <div class="property-amenities">
+                        <span class="amenity">📶 WiFi</span>
+                        <span class="amenity">🌳 Garden</span>
+                        <span class="amenity">🅿️ Parking</span>
+                        <span class="amenity">🐦 Nature</span>
+                    </div>
+                    <div class="property-footer">
+                        <div>
+                            <div class="property-price">KSh 2,800<span class="price-period">/night</span></div>
+                        </div>
+                        <div class="property-host">
+                            <div class="host-avatar">AM</div>
+                            <span>Anne M.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Card 4 -->
+            <div class="property-card">
+                <div class="property-image-wrapper">
+                    <img src="https://storage.googleapis.com/forge-sites/3355504d29cefd58fb5149c5d88e437b11e239d525758d2622e28de1c4747ae5.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=534a557d8a220e3639130d497c3234ada91b90eb615157623924ec2859cf059095a68bc3556a4209c74fb2a8dc20f9ffe06dfee57726e70351e06253121bab9b0eee8a4262aa374f72243126510fc9f3c60604ef8b6a83e337d1f667141871427a0603cfa660dacf0ae4bb86e7b75db2c0cdb11d8ea2cb0d16b9cdd92c935eb13cd4b6e9ca86c6089f3b0b82c66c430af127d978479fd51bade46dde7abd4d6a29cf885f0f8df7e3e3edbc34b0cc326b1344066a35e4498c8bde25bb9387d2fee01302bce2693b6a490fc3253af8d4006215c0205faac23a0424d64fa420115682dde207d95a6a25954c2a033428f00a2a2030410fbd8461c36a0ea9533fb07c" alt="Spacious modern loft apartment with high ceilings, contemporary design in Kisumu city center" class="property-image">
+                    <span class="badge popular">Popular ⭐</span>
+                    <div class="save-btn">❤️</div>
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">View Details</button>
+                        <button class="quick-view-btn">Quick Book</button>
+                    </div>
+                </div>
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-name">Modern City Loft</h3>
+                        <div class="property-rating">
+                            <span class="rating-stars">⭐ 4.6</span>
+                            <span class="rating-count">(92)</span>
+                        </div>
+                    </div>
+                    <span class="location-badge">📍 Kisumu, CBD</span>
+                    <p class="property-description">Contemporary loft in the heart of Kisumu. High ceilings, modern amenities, walking distance to everything.</p>
+                    <div class="property-amenities">
+                        <span class="amenity">📶 WiFi</span>
+                        <span class="amenity">🅿️ Parking</span>
+                        <span class="amenity">❄️ AC</span>
+                        <span class="amenity">🏢 City View</span>
+                    </div>
+                    <div class="property-footer">
+                        <div>
+                            <div class="property-price">KSh 4,200<span class="price-period">/night</span></div>
+                        </div>
+                        <div class="property-host">
+                            <div class="host-avatar">PO</div>
+                            <span>Peter O.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Card 5 -->
+            <div class="property-card">
+                <div class="property-image-wrapper">
+                    <img src="https://storage.googleapis.com/forge-sites/f211b11e12e3a700c6a3bcc15c5e7b840e4746a1da4e0ea5805c7e0345e0482f.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=525399c7b9888e3112bd1e2433984e9aad76a743c0e4be0b958047bf20f609ecc43b6fa3919af27e9d9399d4f35345b33209e20265a33bcdcda48244fa84bc7b2fbe594fff4897aeb3ed7d0ddc1c0fa8222f9fe6a9cb185dfb7ae899559b6441eeabde17e20ca4d39d0262694fd884177f0b0b877d9d9121d2bc3ac844a6050c4605a6f8d9e56ff7f57151ed7413f5ff5e49daad39a2e5e8a5deed1d29dd0a5c608effc5470383c298b3d9291e87b1590ded9c6beaeeadf8b546872674ba6d146ddd3f13b98555b05ae0ea7ab68a9bc76cb7d8a490068fa9b5c48b1dfe3cd38b4e879a188304d9f545f74a7554f13e7077abfc44bd3c521cced21725208f08aa" alt="Luxury penthouse apartment with floor-to-ceiling windows showing panoramic Nairobi skyline views" class="property-image">
+                    <div class="save-btn">❤️</div>
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">View Details</button>
+                        <button class="quick-view-btn">Quick Book</button>
+                    </div>
+                </div>
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-name">Skyline Penthouse</h3>
+                        <div class="property-rating">
+                            <span class="rating-stars">⭐ 5.0</span>
+                            <span class="rating-count">(156)</span>
+                        </div>
+                    </div>
+                    <span class="location-badge">📍 Nairobi, Upperhill</span>
+                    <p class="property-description">Luxury penthouse with stunning city views. Rooftop pool, gym, and entertainment room. Perfect for special occasions.</p>
+                    <div class="property-amenities">
+                        <span class="amenity">📶 WiFi</span>
+                        <span class="amenity">🏊 Pool</span>
+                        <span class="amenity">🏋️ Gym</span>
+                        <span class="amenity">🎮 Entertainment</span>
+                    </div>
+                    <div class="property-footer">
+                        <div>
+                            <div class="property-price">KSh 8,000<span class="price-period">/night</span></div>
+                        </div>
+                        <div class="property-host">
+                            <div class="host-avatar">DK</div>
+                            <span>David K.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Card 6 -->
+            <div class="property-card">
+                <div class="property-image-wrapper">
+                    <img src="https://storage.googleapis.com/forge-sites/2302f00d53c0c95e3e74b6480fc711e059507b3d5f16a197c893525fc9d05598.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=55b88d9d0b8c629106de2717c8d614b84c295ee4ac0912c91a410219d8aa41202869c0090a00197013a5759ee9152c8549dd5dcad6da25d66e36a2eec568aa47424e1c6de1d3cf7ecfd70bd10dd340b5b4d72ec068746da7c79cc5529102cd8601e9e3479509e818e300382e51aa649a8554b7f31323ce67a5795fa9c822b16de61de6861d677ac6e66c26d87f07ece4d714b251eb32030194e12580b12ae6fe1f3f3687198b6205c1181d8a30eb107458276dea9fd9b002cc397fbd8eaece6b51a1ffe81b900c5988121e0722d0af2e042730d7e4b09a57054602d9960cfee24134fd7c1eabcc7791af70186d50e5e80a63d311c8191b8f4a8f2736409b64f3" alt="Rustic safari lodge with thatched roof, wooden deck overlooking savannah with acacia trees in Kenya" class="property-image">
+                    <span class="badge new">New ✨</span>
+                    <div class="save-btn">❤️</div>
+                    <div class="quick-view-overlay">
+                        <button class="quick-view-btn">View Details</button>
+                        <button class="quick-view-btn">Quick Book</button>
+                    </div>
+                </div>
+                <div class="property-content">
+                    <div class="property-header">
+                        <h3 class="property-name">Safari Lodge Experience</h3>
+                        <div class="property-rating">
+                            <span class="rating-stars">⭐ 4.9</span>
+                            <span class="rating-count">(43)</span>
+                        </div>
+                    </div>
+                    <span class="location-badge">📍 Naivasha</span>
+                    <p class="property-description">Authentic safari experience with modern comfort. Wildlife viewing, campfire nights, and stunning sunsets over the savannah.</p>
+                    <div class="property-amenities">
+                        <span class="amenity">🦁 Wildlife</span>
+                        <span class="amenity">🔥 Campfire</span>
+                        <span class="amenity">🌅 Sunset View</span>
+                        <span class="amenity">📶 WiFi</span>
+                    </div>
+                    <div class="property-footer">
+                        <div>
+                            <div class="property-price">KSh 5,500<span class="price-period">/night</span></div>
+                        </div>
+                        <div class="property-host">
+                            <div class="host-avatar">MW</div>
+                            <span>Mary W.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About The BnB 🏠</h3>
+                <p>Kenya's premier youth-friendly accommodation platform. We connect travelers with unique stays across beautiful locations, making travel affordable and accessible for everyone.</p>
+                <div class="social-links">
+                    <div class="social-link">📘</div>
+                    <div class="social-link">📷</div>
+                    <div class="social-link">🐦</div>
+                    <div class="social-link">💼</div>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Browse Listings</a>
+                    <a href="#" class="footer-link">List Your Space</a>
+                    <a href="#" class="footer-link">How It Works</a>
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Trust &amp; Safety</a>
+                    <a href="#" class="footer-link">Cancellation Policy</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">📧 hello@thebnb.co.ke</a>
+                    <a href="#" class="footer-link">📱 +254 700 123 456</a>
+                    <a href="#" class="footer-link">📍 Nairobi, Kenya</a>
+                    <a href="#" class="footer-link">🕐 Mon-Fri: 9AM-6PM</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <p>Get the latest deals and travel tips delivered to your inbox!</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email">
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 The BnB. All rights reserved. Made with ❤️ in Kenya 🇰🇪</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 80) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Search dropdown toggle
+        const searchInput = document.querySelector('.search-input');
+        const searchDropdown = document.querySelector('.search-dropdown');
+        
+        searchInput.addEventListener('focus', () => {
+            searchDropdown.style.display = 'block';
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                searchDropdown.style.display = 'none';
+            }
+        });
+
+        // Pill filter interaction
+        document.querySelectorAll('.pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                if (!this.textContent.includes('💰') && 
+                    !this.textContent.includes('🛁') && 
+                    !this.textContent.includes('🏠')) {
+                    document.querySelectorAll('.pill').forEach(p => {
+                        if (!p.textContent.includes('💰') && 
+                            !p.textContent.includes('🛁') && 
+                            !p.textContent.includes('🏠')) {
+                            p.classList.remove('active');
+                        }
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Property card interactions
+        document.querySelectorAll('.property-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('quick-view-btn') && 
+                    !e.target.classList.contains('save-btn')) {
+                    console.log('Viewing property details');
+                }
+            });
+        });
+
+        // Save button interaction
+        document.querySelectorAll('.save-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.style.background = this.style.background === 'rgb(255, 107, 53)' ? 'white' : '#FF6B35';
+            });
+        });
+
+        // View toggle
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Newsletter form
+        document.querySelector('.newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for subscribing! 🎉');
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+</body></html>
