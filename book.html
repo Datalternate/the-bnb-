@@ -1,0 +1,1126 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Stay - The BnB 🏠</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFF8F0;
+            color: #2D3142;
+            font-size: 15px;
+            line-height: 150%;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            height: 64px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: #FF6B35;
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .hamburger {
+            width: 24px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+        }
+
+        .hamburger:hover {
+            transform: scale(1.1);
+        }
+
+        .hamburger:active {
+            transform: scale(0.95);
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: #2D3142;
+            border-radius: 2px;
+            transition: all 0.3s ease-out;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #E8E8E8;
+            z-index: 1;
+        }
+
+        .progress-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 33%;
+            background: #FF6B35;
+            transition: width 0.3s ease-out;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease-out;
+        }
+
+        .step:hover {
+            transform: scale(1.05);
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #E8E8E8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: all 0.3s ease-out;
+        }
+
+        .step.active .step-circle {
+            background: #FF6B35;
+            border-color: #FF6B35;
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            background: #4ECDC4;
+            border-color: #4ECDC4;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #FF6B35;
+            font-weight: 600;
+        }
+
+        /* Two Column Layout */
+        .booking-layout {
+            display: grid;
+            grid-template-columns: 460px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2D3142;
+        }
+
+        .form-subtitle {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2D3142;
+            margin-bottom: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            height: 48px;
+            border: 2px solid #E8E8E8;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: #2D3142;
+            transition: all 0.3s ease-out;
+            background: white;
+        }
+
+        textarea {
+            height: 100px;
+            padding: 12px 16px;
+            resize: vertical;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        input.valid {
+            border-color: #4ECDC4;
+            background: #F0FFFE;
+        }
+
+        input.error {
+            border-color: #FF6B6B;
+        }
+
+        .validation-icon {
+            position: absolute;
+            right: 16px;
+            top: 40px;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .validation-icon.show {
+            opacity: 1;
+        }
+
+        .error-message {
+            display: none;
+            font-size: 13px;
+            color: #FF6B6B;
+            margin-top: 6px;
+        }
+
+        .error-message.show {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .date-picker-inline {
+            margin-top: 8px;
+            padding: 16px;
+            background: #FFF8F0;
+            border-radius: 12px;
+            border: 2px solid #E8E8E8;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .calendar-month {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .calendar-nav button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+            font-size: 16px;
+        }
+
+        .calendar-nav button:hover {
+            background: #FF6B35;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+
+        .calendar-day.header {
+            font-weight: 600;
+            color: #666;
+            cursor: default;
+        }
+
+        .calendar-day:not(.header):hover {
+            background: #FFE8DC;
+        }
+
+        .calendar-day.selected {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .calendar-day.in-range {
+            background: #FFE8DC;
+        }
+
+        /* Right Column */
+        .right-column {
+            position: sticky;
+            top: 88px;
+        }
+
+        /* Property Card */
+        .property-card-detail {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 2px solid #E8E8E8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .property-image-large {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #E8E8E8;
+        }
+
+        .property-detail-content {
+            padding: 20px;
+        }
+
+        .property-name-detail {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .property-address {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: #666;
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .map-link {
+            color: #FF6B35;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s ease-out;
+        }
+
+        .map-link:hover {
+            text-decoration: underline;
+            transform: translateX(2px);
+        }
+
+        .amenities-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #F5F5F5;
+        }
+
+        .section-heading {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #2D3142;
+        }
+
+        .house-rules {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #F5F5F5;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .host-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #F5F5F5;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .host-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .host-details {
+            flex: 1;
+        }
+
+        .host-name {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .host-rating {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Price Summary Card */
+        .price-summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px solid #E8E8E8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 16px;
+        }
+
+        .price-summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .price-row.highlight {
+            color: #666;
+        }
+
+        .price-row.total {
+            padding-top: 16px;
+            border-top: 2px solid #F5F5F5;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: #FF6B35;
+            margin-top: 8px;
+        }
+
+        .promo-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #F5F5F5;
+        }
+
+        .promo-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            color: #FF6B35;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease-out;
+        }
+
+        .promo-toggle:hover {
+            transform: translateX(2px);
+        }
+
+        .promo-input-container {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .promo-input-container.show {
+            display: flex;
+            gap: 8px;
+        }
+
+        .promo-input {
+            flex: 1;
+            height: 40px;
+            font-size: 14px;
+        }
+
+        .apply-promo-btn {
+            height: 40px;
+            padding: 0 16px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+        }
+
+        .apply-promo-btn:hover {
+            background: #E85A2A;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .apply-promo-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Booking Protection Card */
+        .protection-card {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(78, 205, 196, 0.05) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #4ECDC4;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .protection-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .protection-content {
+            flex: 1;
+        }
+
+        .protection-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2D3142;
+        }
+
+        .protection-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .learn-more-link {
+            color: #4ECDC4;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s ease-out;
+        }
+
+        .learn-more-link:hover {
+            text-decoration: underline;
+            transform: translateX(2px);
+        }
+
+        /* Bottom Action Bar */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 2px solid #E8E8E8;
+            padding: 16px 32px;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+            z-index: 90;
+        }
+
+        .action-bar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        .btn-secondary {
+            height: 48px;
+            padding: 0 32px;
+            border: 2px solid #FF6B35;
+            background: white;
+            color: #FF6B35;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            background: #FFE8DC;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            height: 48px;
+            padding: 0 40px;
+            background: #FF6B35;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease-out;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #E85A2A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .booking-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .right-column {
+                position: static;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .form-section {
+                padding: 24px;
+            }
+
+            .nav {
+                padding: 0 16px;
+            }
+
+            .action-bar {
+                padding: 16px;
+            }
+
+            .action-bar-content {
+                flex-direction: column;
+            }
+
+            .btn-secondary, .btn-primary {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-steps {
+                gap: 8px;
+            }
+
+            .step-label {
+                font-size: 12px;
+            }
+
+            .step-circle {
+                width: 36px;
+                height: 36px;
+            }
+
+            .amenities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">The BnB 🏠</div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Progress Indicator -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line">
+                    <div class="progress-line-fill"></div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Details 📝</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Dates 📅</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Review ✅</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="booking-layout">
+            <!-- Left Column - Form -->
+            <div class="form-section">
+                <h1 class="form-title">Complete Your Booking 🎉</h1>
+                <p class="form-subtitle">Fill in your details to reserve this amazing stay</p>
+
+                <form id="bookingForm">
+                    <!-- Guest Information -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" required="">
+                            <span class="validation-icon">✅</span>
+                            <div class="error-message">⚠️ Please enter your first name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" required="">
+                            <span class="validation-icon">✅</span>
+                            <div class="error-message">⚠️ Please enter your last name</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address 📧</label>
+                        <input type="email" id="email" placeholder="you@example.com" required="">
+                        <span class="validation-icon">✅</span>
+                        <div class="error-message">⚠️ Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number 📱</label>
+                        <input type="tel" id="phone" placeholder="+254 700 000 000" required="">
+                        <span class="validation-icon">✅</span>
+                        <div class="error-message">⚠️ Please enter a valid phone number</div>
+                    </div>
+
+                    <!-- Check-in Date -->
+                    <div class="form-group">
+                        <label for="checkIn">Check-in Date 📅</label>
+                        <input type="text" id="checkIn" placeholder="Select check-in date" readonly="" required="">
+                        <div class="date-picker-inline">
+                            <div class="calendar-header">
+                                <div class="calendar-month">January 2025</div>
+                                <div class="calendar-nav">
+                                    <button type="button">◀</button>
+                                    <button type="button">▶</button>
+                                </div>
+                            </div>
+                            <div class="calendar-grid">
+                                <div class="calendar-day header">Su</div>
+                                <div class="calendar-day header">Mo</div>
+                                <div class="calendar-day header">Tu</div>
+                                <div class="calendar-day header">We</div>
+                                <div class="calendar-day header">Th</div>
+                                <div class="calendar-day header">Fr</div>
+                                <div class="calendar-day header">Sa</div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day"></div>
+                                <div class="calendar-day">1</div>
+                                <div class="calendar-day">2</div>
+                                <div class="calendar-day">3</div>
+                                <div class="calendar-day">4</div>
+                                <div class="calendar-day">5</div>
+                                <div class="calendar-day">6</div>
+                                <div class="calendar-day">7</div>
+                                <div class="calendar-day">8</div>
+                                <div class="calendar-day">9</div>
+                                <div class="calendar-day">10</div>
+                                <div class="calendar-day">11</div>
+                                <div class="calendar-day">12</div>
+                                <div class="calendar-day">13</div>
+                                <div class="calendar-day">14</div>
+                                <div class="calendar-day selected">15</div>
+                                <div class="calendar-day in-range">16</div>
+                                <div class="calendar-day in-range">17</div>
+                                <div class="calendar-day in-range">18</div>
+                                <div class="calendar-day in-range">19</div>
+                                <div class="calendar-day selected">20</div>
+                                <div class="calendar-day">21</div>
+                                <div class="calendar-day">22</div>
+                                <div class="calendar-day">23</div>
+                                <div class="calendar-day">24</div>
+                                <div class="calendar-day">25</div>
+                                <div class="calendar-day">26</div>
+                                <div class="calendar-day">27</div>
+                                <div class="calendar-day">28</div>
+                                <div class="calendar-day">29</div>
+                                <div class="calendar-day">30</div>
+                                <div class="calendar-day">31</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Number of Guests -->
+                    <div class="form-group">
+                        <label for="guests">Number of Guests 👥</label>
+                        <select id="guests" required="">
+                            <option value="">Select number of guests</option>
+                            <option value="1">1 guest</option>
+                            <option value="2" selected="">2 guests</option>
+                            <option value="3">3 guests</option>
+                            <option value="4">4 guests</option>
+                        </select>
+                    </div>
+
+                    <!-- Special Requests -->
+                    <div class="form-group">
+                        <label for="requests">Special Requests 💬</label>
+                        <textarea id="requests" placeholder="Any special requests or requirements? (optional)"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column - Property Details & Summary -->
+            <div class="right-column">
+                <!-- Property Detail Card -->
+                <div class="property-card-detail">
+                    <img src="https://storage.googleapis.com/forge-sites/39572144679550204895daad22c81374a6e7a9b64d8aace6cd534fdb74fe27e7.webp?X-Goog-Algorithm=GOOG4-RSA-SHA256&amp;X-Goog-Credential=164061697651-compute%40developer.gserviceaccount.com%2F20251101%2Fauto%2Fstorage%2Fgoog4_request&amp;X-Goog-Date=20251101T151034Z&amp;X-Goog-Expires=86400&amp;X-Goog-SignedHeaders=host&amp;response-access-control-allow-origin=https%3A%2F%2Fforge.moonchild.ai&amp;X-Goog-Signature=1672f791d8d5fda990fb2cc10913e3a9c8f8c6487d36378fda40aae8ad888cab05127a0216723ce3f86646d2546ebe9c29f7d52e109b14739401b7ceb4afe03cc0825ac3d68ecd1887b33ef5cbeb81e46aeb1038f2d802b91e99133c740726caeea18dae74af4eb9d291133bb2060dff710b97c425e44ba57bc150f5e7a0d26322cc1b96d5924f1a20a1480a0563394f04dfdf84c4f50a05a78c30eb6ed85f9eb52c68f8a54212d00e307b6f8112cd22a5e4b53976138cca8d3a0bdac6fe6e9c9342c99bf304da9266cfd276b4bbdffc0c4025b03253738028b95715fb4321305c30944333bf3011158b8ca61599234f1a7110c2d560e14cf1a226b8fbc36542" alt="Modern studio apartment with contemporary furnishings and natural lighting" class="property-image-large">
+                    <div class="property-detail-content">
+                        <h2 class="property-name-detail">Cozy Studio in Westlands</h2>
+                        <div class="property-address">
+                            <span>📍</span>
+                            <div>
+                                Muthangari Drive, Westlands<br>
+                                Nairobi, Kenya<br>
+                                <a href="#" class="map-link">View on map 🗺️</a>
+                            </div>
+                        </div>
+
+                        <div class="amenities-section">
+                            <h3 class="section-heading">Amenities ✨</h3>
+                            <div class="amenities-grid">
+                                <div class="amenity-item">📶 High-speed WiFi</div>
+                                <div class="amenity-item">🍳 Full kitchen</div>
+                                <div class="amenity-item">🧺 Washer/Dryer</div>
+                                <div class="amenity-item">📺 Smart TV</div>
+                                <div class="amenity-item">❄️ Air conditioning</div>
+                                <div class="amenity-item">🅿️ Free parking</div>
+                            </div>
+                        </div>
+
+                        <div class="house-rules">
+                            <h3 class="section-heading">House Rules 📋</h3>
+                            <div class="rule-item">✓ Check-in: After 2:00 PM</div>
+                            <div class="rule-item">✓ Check-out: Before 11:00 AM</div>
+                            <div class="rule-item">✓ No smoking inside</div>
+                            <div class="rule-item">✓ No parties or events</div>
+                        </div>
+
+                        <div class="host-info">
+                            <div class="host-avatar">👤</div>
+                            <div class="host-details">
+                                <div class="host-name">Hosted by Jane K.</div>
+                                <div class="host-rating">⭐ 4.9 (127 reviews)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Summary Card -->
+                <div class="price-summary-card">
+                    <h3 class="price-summary-title">Price Summary 💰</h3>
+                    <div class="price-row">
+                        <span>KSh 3,500 × 5 nights</span>
+                        <span>KSh 17,500</span>
+                    </div>
+                    <div class="price-row highlight">
+                        <span>Service fee</span>
+                        <span>KSh 1,225</span>
+                    </div>
+                    <div class="price-row highlight">
+                        <span>Cleaning fee</span>
+                        <span>KSh 500</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total</span>
+                        <span>KSh 19,225</span>
+                    </div>
+
+                    <div class="promo-section">
+                        <div class="promo-toggle" onclick="document.querySelector('.promo-input-container').classList.toggle('show')">
+                            <span>Have a promo code? 🎟️</span>
+                            <span>+</span>
+                        </div>
+                        <div class="promo-input-container">
+                            <input type="text" class="promo-input" placeholder="Enter promo code">
+                            <button class="apply-promo-btn">Apply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Protection Card -->
+                <div class="protection-card">
+                    <div class="protection-icon">🛡️</div>
+                    <div class="protection-content">
+                        <h3 class="protection-title">Booking Protection</h3>
+                        <p class="protection-text">Your booking is protected with our guarantee. Get a full refund if the host cancels or if the listing isn't as described.</p>
+                        <a href="#" class="learn-more-link">Learn more →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Action Bar -->
+    <div class="action-bar">
+        <div class="action-bar-content">
+            <button class="btn-secondary">💾 Save for Later</button>
+            <button class="btn-primary">Confirm Booking ✓</button>
+        </div>
+    </div>
+
+    <script>
+        // Form validation
+        const form = document.getElementById('bookingForm');
+        const inputs = form.querySelectorAll('input[required]');
+
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                validateInput(this);
+            });
+
+            input.addEventListener('blur', function() {
+                validateInput(this);
+            });
+        });
+
+        function validateInput(input) {
+            const group = input.closest('.form-group');
+            const icon = group.querySelector('.validation-icon');
+            const error = group.querySelector('.error-message');
+            let isValid = false;
+
+            if (input.type === 'email') {
+                isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+            } else if (input.type === 'tel') {
+                isValid = /^\+?[\d\s-]{10,}$/.test(input.value);
+            } else {
+                isValid = input.value.trim().length > 0;
+            }
+
+            if (isValid) {
+                input.classList.add('valid');
+                input.classList.remove('error');
+                icon.classList.add('show');
+                error.classList.remove('show');
+            } else if (input.value.length > 0) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                icon.classList.remove('show');
+                error.classList.add('show');
+            } else {
+                input.classList.remove('valid', 'error');
+                icon.classList.remove('show');
+                error.classList.remove('show');
+            }
+        }
+
+        // Calendar interaction
+        const calendarDays = document.querySelectorAll('.calendar-day:not(.header)');
+        calendarDays.forEach(day => {
+            day.addEventListener('click', function() {
+                if (this.textContent) {
+                    console.log('Date selected:', this.textContent);
+                }
+            });
+        });
+
+        // Step navigation
+        const steps = document.querySelectorAll('.step');
+        steps.forEach((step, index) => {
+            step.addEventListener('click', function() {
+                steps.forEach(s => s.classList.remove('active', 'completed'));
+                
+                for (let i = 0; i < index; i++) {
+                    steps[i].classList.add('completed');
+                }
+                
+                this.classList.add('active');
+                
+                const progressFill = document.querySelector('.progress-line-fill');
+                progressFill.style.width = `${(index / (steps.length - 1)) * 100}%`;
+            });
+        });
+
+        // Button interactions
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            const allValid = Array.from(inputs).every(input => input.classList.contains('valid'));
+            
+            if (allValid) {
+                this.textContent = '✓ Booking Confirmed!';
+                this.style.background = '#4ECDC4';
+                setTimeout(() => {
+                    console.log('Booking confirmed!');
+                }, 1000);
+            } else {
+                inputs.forEach(input => {
+                    if (!input.classList.contains('valid') && input.value === '') {
+                        validateInput(input);
+                    }
+                });
+            }
+        });
+
+        // Logo click to home
+        document.querySelector('.nav-logo').addEventListener('click', function() {
+            console.log('Navigating to home');
+        });
+
+        // Hamburger menu
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.style.transform = 'rotate(90deg)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 300);
+        });
+    </script>
+
+</body></html>
